@@ -1,17 +1,22 @@
-!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unrestricted ChatGPT</title>
-    <script src="chatgpt.js" defer></script>
-</head>
-<body>
-    <h1>Unrestricted ChatGPT</h1>
-    <div>
-        <textarea id="userInput" rows="4" cols="50"></textarea><br>
-        <button onclick="sendMessage()">Envoyer</button>
-    </div>
-    <div id="response"></div>
-</body>
-</html>
+async function sendMessage() {
+    const userInput = document.getElementById('userInput').value;
+    const responseDiv = document.getElementById('response');
+
+    const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer 3599cfcad6954ec8bad778d6447209df`
+        },
+        body: JSON.stringify({
+            prompt: userInput,
+            max_tokens: 150,
+            temperature: 1.0,
+            top_p: 1.0,
+            n: 1
+        })
+    });
+
+    const data = await response.json();
+    responseDiv.innerHTML = data.choices[0].text;
+}
